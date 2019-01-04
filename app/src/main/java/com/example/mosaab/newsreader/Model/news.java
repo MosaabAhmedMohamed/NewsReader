@@ -1,6 +1,6 @@
 package com.example.mosaab.newsreader.Model;
 
-public class news {
+public class news  {
 
     private int id ;
     private String Title;

@@ -4,39 +4,39 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.mosaab.newsreader.Common.Common;
 import com.example.mosaab.newsreader.ViewHolder.News_fragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class View_Pager_adapter extends FragmentPagerAdapter {
-    public View_Pager_adapter(FragmentManager fm) {
-        super(fm);
-    }
 
-    @Override
-    public Fragment getItem(int position) {
+        private List<Fragment> FragmentCategory =new ArrayList<>();
 
-        switch (position){
+        public View_Pager_adapter(FragmentManager fm)
+        {
+            super(fm);
+        }
 
-            case 0:
-                return News_fragment.newInstance("param1") ;
+        public void addFragmentPage(Fragment fragment,String fragmentName ) {
 
+            FragmentCategory.add(fragment);
 
-            case 1:
-                News_fragment news_fragment2 = new News_fragment();
-                return news_fragment2 ;
+        }
 
-            case 2:
-                News_fragment news_fragment3 = new News_fragment();
-                return news_fragment3 ;
+        @Override
+        public Fragment getItem(int position) {
+            return FragmentCategory.get(position);
+        }
 
-            default:
-                return null;
+        @Override
+        public int getCount() {
+            return FragmentCategory.size();
         }
 
 
+
+
     }
 
-    @Override
-    public int getCount() {
-        return 3;
-    }
-}

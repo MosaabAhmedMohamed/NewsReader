@@ -44,6 +44,11 @@ public class News_Adapter extends RecyclerView.Adapter<News_Adapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
         viewHolder.news_title.setText(news_ArrayList.get(i).getTitle());
+        viewHolder.news_desc.setText(news_ArrayList.get(i).getDetial());
+
+       /* Picasso.get().load(new StringBuilder("https://openweathermap.org/img/w/")
+                .append(forecast_json_list.getList().get(i).getWeather().get(0).getIcon())
+                .append(".png").toString()).into(viewHolder.forecast_imageView);*/
     }
 
     @Override
@@ -55,7 +60,7 @@ public class News_Adapter extends RecyclerView.Adapter<News_Adapter.ViewHolder> 
 
         protected CardView news_card;
         protected CircleImageView news_iamge;
-        protected TextView news_title;
+        protected TextView news_title,news_desc;
 
         public ViewHolder(View single_news_item) {
             super(single_news_item);
@@ -63,7 +68,7 @@ public class News_Adapter extends RecyclerView.Adapter<News_Adapter.ViewHolder> 
             news_card = single_news_item.findViewById(R.id.news_card);
             news_iamge = single_news_item.findViewById(R.id.news_image);
             news_title = single_news_item.findViewById(R.id.news_title);
-
+            news_desc = single_news_item.findViewById(R.id.news_desc);
 
             news_card.setOnClickListener(new View.OnClickListener() {
                 @Override

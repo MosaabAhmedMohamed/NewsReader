@@ -38,8 +38,25 @@
             android:layout_toRightOf="@id/news_image"
             android:layout_centerHorizontal="true"
             android:textAlignment="center"
+            android:text="Title"
             android:textColor="@color/colorPrimary"
             android:textSize="22sp"
+            />
+
+        <TextView
+            android:id="@+id/news_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:textAllCaps="false"
+            android:layout_toRightOf="@id/news_image"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:text="Description"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:layout_below="@id/news_title"
             />
 
 

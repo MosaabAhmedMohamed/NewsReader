@@ -3,24 +3,34 @@ package com.example.mosaab.newsreader.ViewHolder;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.example.mosaab.newsreader.Adapter.View_Pager_adapter;
 import com.example.mosaab.newsreader.Common.Common;
+import com.example.mosaab.newsreader.Model.TechCrunch;
 import com.example.mosaab.newsreader.Model.news;
 import com.example.mosaab.newsreader.R;
+import com.example.mosaab.newsreader.Remote.API_Service;
+import com.example.mosaab.newsreader.Remote.RetrofitClient;
 import java.util.ArrayList;
 import io.paperdb.Paper;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 
 public class MainActivity extends AppCompatActivity {
 
 
+    private static final String TAG = "MainActivity";
     private ArrayList<news> TechCrunch_local_dataList;
     private TextView TechCrunch_TV, Mashable_TV, BusinessInsider_TV;
     private ViewPager mainViewPager;
 
     private View_Pager_adapter view_pager_adapter;
+    private API_Service api_service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
             Dummy_Data();
         }
 
+        InitRetorFit();
 
         mainViewPager = findViewById(R.id.mainViewPager);
         mainViewPager.setOffscreenPageLimit(2);
@@ -178,6 +189,45 @@ public class MainActivity extends AppCompatActivity {
             BusinessInsider_TV.setTextSize(22);
         }
     }
+
+    private void InitRetorFit() {
+       api_service = RetrofitClient.getInstance(Common.TechCrunch_URL).create(API_Service.class);
+       getNews_data();
+    }
+
+
+    //Getting the data from the API
+     private void getNews_data()
+     {
+         Call<TechCrunch> call =  api_service.getTechCrunch_News("business",Common.TechCrunch_API_KEY);
+
+         call.enqueue(new Callback<TechCrunch>() {
+             @Override
+             public void onResponse(Call<TechCrunch> call, Response<TechCrunch> response) {
+
+                 if (!response.isSuccessful()) {
+                     Log.d(TAG, "onResponse: error"+ response.code() + response.message());
+                     return;
+                 }
+
+                 TechCrunch techCrunch ;
+
+                 techCrunch = response.body();
+
+
+                 Log.d(TAG, "onResponse: "+ techCrunch.getArticles().get(1).getUrlToImage());
+
+
+             }
+
+             @Override
+             public void onFailure(Call<TechCrunch> call, Throwable t) {
+                 Log.d(TAG, "onFailure: "+ t.getMessage());
+             }
+         });
+
+     }
+
 
 
 }
