@@ -20,7 +20,7 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
             android:padding="16dp"
-            android:text="Profile"
+            android:text="News 1"
             android:textColor="@color/textTabBright"
             android:textSize="22sp" />
 
@@ -31,7 +31,7 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
             android:padding="16dp"
-            android:text="All Users"
+            android:text="News 2 "
             android:textColor="@color/textTabLight"
             android:textSize="16sp" />
 
@@ -43,7 +43,7 @@
             android:fontFamily="sans-serif-condensed"
             android:padding="16dp"
             android:textColor="@color/textTabLight"
-            android:text="Notification"
+            android:text="News 3"
             android:textSize="16sp" />
 
     </LinearLayout>
