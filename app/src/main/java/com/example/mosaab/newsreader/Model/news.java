@@ -1,4 +1,4 @@
-package com.example.mosaab.newsreader;
+package com.example.mosaab.newsreader.Model;
 
 public class news {
 

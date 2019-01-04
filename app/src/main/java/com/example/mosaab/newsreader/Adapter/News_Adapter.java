@@ -1,4 +1,4 @@
-package com.example.mosaab.newsreader;
+package com.example.mosaab.newsreader.Adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -7,6 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.mosaab.newsreader.Interface.ItemClickListner;
+import com.example.mosaab.newsreader.R;
+import com.example.mosaab.newsreader.Model.news;
 
 import java.util.ArrayList;
 

@@ -1,15 +1,19 @@
-package com.example.mosaab.newsreader;
+package com.example.mosaab.newsreader.ViewHolder;
 
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.example.mosaab.newsreader.Adapter.News_Adapter;
+import com.example.mosaab.newsreader.Interface.ItemClickListner;
+import com.example.mosaab.newsreader.R;
+import com.example.mosaab.newsreader.Model.news;
 
 import java.util.ArrayList;
 

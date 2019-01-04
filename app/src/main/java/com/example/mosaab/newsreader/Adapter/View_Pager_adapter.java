@@ -1,8 +1,10 @@
-package com.example.mosaab.newsreader;
+package com.example.mosaab.newsreader.Adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.example.mosaab.newsreader.ViewHolder.News_fragment;
 
 public class View_Pager_adapter extends FragmentPagerAdapter {
     public View_Pager_adapter(FragmentManager fm) {
