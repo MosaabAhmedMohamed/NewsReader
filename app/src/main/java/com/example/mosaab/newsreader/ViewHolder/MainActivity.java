@@ -3,21 +3,11 @@ package com.example.mosaab.newsreader.ViewHolder;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.example.mosaab.newsreader.Adapter.View_Pager_adapter;
 import com.example.mosaab.newsreader.Common.Common;
-import com.example.mosaab.newsreader.Model.TechCrunch;
-import com.example.mosaab.newsreader.Model.news;
 import com.example.mosaab.newsreader.R;
-import com.example.mosaab.newsreader.Remote.API_Service;
-import com.example.mosaab.newsreader.Remote.RetrofitClient;
-import java.util.ArrayList;
-import io.paperdb.Paper;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 
@@ -25,12 +15,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     private static final String TAG = "MainActivity";
-    private ArrayList<news> TechCrunch_local_dataList;
+
+
     private TextView TechCrunch_TV, Mashable_TV, BusinessInsider_TV;
     private ViewPager mainViewPager;
-
     private View_Pager_adapter view_pager_adapter;
-    private API_Service api_service;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,37 +35,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void Init_UI() {
-        Paper.init(this);
-        TechCrunch_local_dataList = new ArrayList<>();
 
         TechCrunch_TV = findViewById(R.id.TECHCrunch_TV);
         Mashable_TV = findViewById(R.id.Mashable_TV);
         BusinessInsider_TV = findViewById(R.id.Insider_TV);
 
-        if (    Paper.book().read(Common.TechCrunch )== null ||
-                Paper.book().read(Common.Mashable) == null ||
-                Paper.book().read(Common.BusinessInsider) == null)
-        {
-            Dummy_Data();
-        }
-
-
-        if (!HasLocalData())
-        {
-            Dummy_Data();
-        }
-
-        InitRetorFit();
-
         mainViewPager = findViewById(R.id.mainViewPager);
         mainViewPager.setOffscreenPageLimit(2);
-
-
         view_pager_adapter = new View_Pager_adapter(getSupportFragmentManager());
-        view_pager_adapter.addFragmentPage(News_fragment.newInstance(Common.TechCrunch),"");
-        view_pager_adapter.addFragmentPage(News_fragment.newInstance(Common.Mashable),"");
-        view_pager_adapter.addFragmentPage(News_fragment.newInstance(Common.BusinessInsider),"");
-        mainViewPager.setAdapter(view_pager_adapter);
+        InitViewPager();
+
 
         TechCrunch_TV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,40 +85,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private boolean HasLocalData() {
-
-        TechCrunch_local_dataList =  Paper.book().read(Common.TechCrunch);
-
-
-        if(TechCrunch_local_dataList != null)
-        {
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private void Dummy_Data()
+    private void InitViewPager()
     {
-        TechCrunch_local_dataList.add(new news(1,"newsTECH","lablabla"));
-        TechCrunch_local_dataList.add(new news(1,"news","lablabla"));
-        TechCrunch_local_dataList.add(new news(1,"news","lablabla"));
-        TechCrunch_local_dataList.add(new news(1,"news","lablabla"));
-        TechCrunch_local_dataList.add(new news(1,"news","lablabla"));
-        TechCrunch_local_dataList.add(new news(1,"news","lablabla"));
-        TechCrunch_local_dataList.add(new news(1,"news","lablabla"));
-        TechCrunch_local_dataList.add(new news(1,"news","lablabla"));
-
-        SaveInLocal(TechCrunch_local_dataList);
-
+        view_pager_adapter.addFragmentPage(new TechCrunch(),"");
+        view_pager_adapter.addFragmentPage(News_fragment.newInstance(Common.Mashable),"");
+        view_pager_adapter.addFragmentPage(News_fragment.newInstance(Common.BusinessInsider),"");
+        mainViewPager.setAdapter(view_pager_adapter);
     }
 
-    private void SaveInLocal(ArrayList<news> news_arraylist) {
-        Paper.book().write(Common.TechCrunch,news_arraylist);
-        Paper.book().write(Common.Mashable,news_arraylist);
-        Paper.book().write(Common.BusinessInsider,news_arraylist);
-    }
+
 
 
 
@@ -190,43 +136,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void InitRetorFit() {
-       api_service = RetrofitClient.getInstance(Common.TechCrunch_URL).create(API_Service.class);
-       getNews_data();
-    }
 
-
-    //Getting the data from the API
-     private void getNews_data()
-     {
-         Call<TechCrunch> call =  api_service.getTechCrunch_News("business",Common.TechCrunch_API_KEY);
-
-         call.enqueue(new Callback<TechCrunch>() {
-             @Override
-             public void onResponse(Call<TechCrunch> call, Response<TechCrunch> response) {
-
-                 if (!response.isSuccessful()) {
-                     Log.d(TAG, "onResponse: error"+ response.code() + response.message());
-                     return;
-                 }
-
-                 TechCrunch techCrunch ;
-
-                 techCrunch = response.body();
-
-
-                 Log.d(TAG, "onResponse: "+ techCrunch.getArticles().get(1).getUrlToImage());
-
-
-             }
-
-             @Override
-             public void onFailure(Call<TechCrunch> call, Throwable t) {
-                 Log.d(TAG, "onFailure: "+ t.getMessage());
-             }
-         });
-
-     }
 
 
 

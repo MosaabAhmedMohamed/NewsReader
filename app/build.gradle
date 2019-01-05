@@ -39,5 +39,8 @@ dependencies {
     //Paper
     implementation 'io.paperdb:paperdb:2.6'
 
+    //Picasso image libarary
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
 
 }

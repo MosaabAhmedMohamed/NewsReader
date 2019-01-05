@@ -9,8 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.mosaab.newsreader.Interface.ItemClickListner;
+import com.example.mosaab.newsreader.Interface.News;
 import com.example.mosaab.newsreader.R;
-import com.example.mosaab.newsreader.Model.news;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -18,19 +19,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class News_Adapter extends RecyclerView.Adapter<News_Adapter.ViewHolder> {
 
-    private ArrayList<news> news_ArrayList;
+    private ArrayList<News> news_ArrayList;
     private ItemClickListner itemClickListner;
-    private String news_service_api;
 
     public void setOnItemClickListner(ItemClickListner listner)
     {
         itemClickListner=listner;
     }
 
-    public News_Adapter(ArrayList<news> news_ArrayList, ItemClickListner itemClickListner, String news_service_Api) {
+    public News_Adapter(ArrayList<News> news_ArrayList, ItemClickListner itemClickListner) {
+
         this.news_ArrayList = news_ArrayList;
         this.itemClickListner = itemClickListner;
-        news_service_api = news_service_Api;
     }
 
     @NonNull
@@ -44,11 +44,8 @@ public class News_Adapter extends RecyclerView.Adapter<News_Adapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
         viewHolder.news_title.setText(news_ArrayList.get(i).getTitle());
-        viewHolder.news_desc.setText(news_ArrayList.get(i).getDetial());
-
-       /* Picasso.get().load(new StringBuilder("https://openweathermap.org/img/w/")
-                .append(forecast_json_list.getList().get(i).getWeather().get(0).getIcon())
-                .append(".png").toString()).into(viewHolder.forecast_imageView);*/
+        viewHolder.news_desc.setText(news_ArrayList.get(i).getDescription());
+        Picasso.get().load(news_ArrayList.get(i).getUrlToImage()).into(viewHolder.news_iamge);
     }
 
     @Override

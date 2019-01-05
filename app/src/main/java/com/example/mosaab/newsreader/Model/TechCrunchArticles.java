@@ -1,13 +1,16 @@
 package com.example.mosaab.newsreader.Model;
 
-public class TechCrunchArticles {
+import com.example.mosaab.newsreader.Interface.News;
+
+
+public class TechCrunchArticles implements News {
 
     private String title;
     private String description;
     private String urlToImage;
     private String content;
     private String publishedAt;
-    private String id;
+    private int id;
     private String name;
     private String author;
 
@@ -20,11 +23,11 @@ public class TechCrunchArticles {
         this.publishedAt = publishedAt;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -75,4 +78,5 @@ public class TechCrunchArticles {
     public void setContent(String content) {
         this.content = content;
     }
+
 }
