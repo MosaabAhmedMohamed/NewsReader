@@ -1,41 +1,38 @@
 package com.example.mosaab.newsreader.Common;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import java.io.IOException;
 
-import com.example.mosaab.newsreader.Remote.API_Service;
-import com.example.mosaab.newsreader.Remote.RetrofitClient;
 
 public class Common {
 
-    public static final String TechCrunch = "Tech Crunch";
-    public static final String TechCrunch_API_KEY ="6c29d74094a34bf5be92d544a0f86f30";
-    public static final String TechCrunch_URL = "https://newsapi.org/v2/";
+    public static final String TechCrunch = "TechCrunch";
+    public static final String TECHCrunchSource = "techcrunch";
+    public static final String API_KEY ="6c29d74094a34bf5be92d544a0f86f30";
 
     public static final String Mashable = "Mashable";
-    public static final String BusinessInsider = "Business Insider";
+    public static final String MashableSource = "mashable";
+
+    public static final String BusinessInsider = "BusinessInsider";
+    public static final String BusinessInsiderSource = "business-insider";
+
+    public static final String SavedAPIS_Key = "SavedAPIS_Key";
+
+    public static final String APIS_URL = "https://newsapi.org/v2/";
 
 
 
-
-    public static boolean  isConnectedToInternet(Context context)
+    public static boolean  isConnectedToInternet()
     {
-        ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        if(connectivityManager != null)
-        {
-            NetworkInfo[] info = connectivityManager.getAllNetworkInfo();
-            if(info != null)
-            {
-                for (int i= 0;i<info.length;i++)
-                {
-                    if(info[i].getState() == NetworkInfo.State.CONNECTED)
-                        return true;
-                }
-
-            }
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
         }
+        catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+
         return false;
     }
 }

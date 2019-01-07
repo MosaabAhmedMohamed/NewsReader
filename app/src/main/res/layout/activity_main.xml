@@ -8,46 +8,13 @@
     android:background="@drawable/background_color"
     tools:context=".ViewHolder.MainActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+
+    <include
+        android:id="@+id/tablayt"
+        layout="@layout/tablayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/TECHCrunch_TV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-condensed"
-            android:padding="16dp"
-            android:text="Tech Crunch"
-            android:textColor="@color/textTabBright"
-            android:textSize="22sp" />
-
-        <TextView
-            android:id="@+id/Mashable_TV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-condensed"
-            android:padding="16dp"
-            android:text="Mashable"
-            android:textColor="@color/textTabLight"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/Insider_TV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-condensed"
-            android:padding="16dp"
-            android:textColor="@color/textTabLight"
-            android:text="Business Insider"
-            android:textSize="16sp" />
-
-    </LinearLayout>
+        ></include>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/mainViewPager"
@@ -56,7 +23,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        app:layout_constraintTop_toBottomOf="@+id/tablayt">
 
     </android.support.v4.view.ViewPager>
 

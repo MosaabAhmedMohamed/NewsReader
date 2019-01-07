@@ -2,20 +2,20 @@ package com.example.mosaab.newsreader.Model;
 
 import java.util.ArrayList;
 
-public class TechCrunch {
+public class news_api {
 
     private String status;
     private float totalResults;
-    ArrayList<TechCrunchArticles> articles = new ArrayList<>();
+    ArrayList<NewsArticles> articles = new ArrayList<>();
 
 
 
 
-    public ArrayList<TechCrunchArticles> getArticles() {
+    public ArrayList<NewsArticles> getArticles() {
         return articles;
     }
 
-    public void setArticles(ArrayList<TechCrunchArticles> articles) {
+    public void setArticles(ArrayList<NewsArticles> articles) {
         this.articles = articles;
     }
 

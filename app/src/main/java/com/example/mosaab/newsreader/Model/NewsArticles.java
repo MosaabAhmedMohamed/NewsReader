@@ -1,18 +1,19 @@
 package com.example.mosaab.newsreader.Model;
 
-import com.example.mosaab.newsreader.Interface.News;
 
-
-public class TechCrunchArticles implements News {
+public class NewsArticles  {
 
     private String title;
     private String description;
     private String urlToImage;
+    private String url;
     private String content;
     private String publishedAt;
     private int id;
     private String name;
     private String author;
+
+
 
 
     public String getPublishedAt() {
@@ -79,4 +80,11 @@ public class TechCrunchArticles implements News {
         this.content = content;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }

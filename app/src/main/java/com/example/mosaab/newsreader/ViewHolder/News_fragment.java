@@ -12,11 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import com.example.mosaab.newsreader.Adapter.News_Adapter;
+
 import com.example.mosaab.newsreader.Common.Common;
 import com.example.mosaab.newsreader.Interface.ItemClickListner;
-import com.example.mosaab.newsreader.Interface.News;
-import com.example.mosaab.newsreader.Model.TechCrunch;
+import com.example.mosaab.newsreader.Model.NewsArticles;
+import com.example.mosaab.newsreader.Model.news_api;
 import com.example.mosaab.newsreader.R;
 import com.example.mosaab.newsreader.Remote.API_Service;
 import com.example.mosaab.newsreader.Remote.RetrofitClient;
@@ -31,9 +31,13 @@ import retrofit2.Response;
 public class News_fragment extends Fragment implements ItemClickListner {
 
     private static final String pram1 = "pram1";
+    private static final String pram2 = "pram2";
+
     public static final String TAG = "News_fragment";
 
     private String News_API_Name;
+    private String Source_API_Name;
+    private boolean IslocalData = false;
 
     private View News_Fragment_View;
     private SwipeRefreshLayout refreshLayout;
@@ -41,9 +45,8 @@ public class News_fragment extends Fragment implements ItemClickListner {
     private RecyclerView recyclerView;
     private News_Adapter news_adapter;
 
-    private ArrayList<News> local_dataList;
+    private ArrayList<NewsArticles> local_dataList;
     private API_Service api_service;
-    private TechCrunch techCrunch ;
 
 
     public News_fragment() {
@@ -51,10 +54,11 @@ public class News_fragment extends Fragment implements ItemClickListner {
     }
 
 
-    public static News_fragment newInstance(String param1) {
+    public static News_fragment newInstance(String param1,String param2) {
         News_fragment fragment = new News_fragment();
         Bundle args = new Bundle();
         args.putString(pram1, param1);
+        args.putString(pram2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,6 +68,7 @@ public class News_fragment extends Fragment implements ItemClickListner {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             News_API_Name = getArguments().getString(pram1);
+            Source_API_Name = getArguments().getString(pram2);
             Log.d(TAG, "onCreate: " + News_API_Name);
         }
     }
@@ -81,19 +86,25 @@ public class News_fragment extends Fragment implements ItemClickListner {
 
     private void Init_UI()
     {
-
+        local_dataList = new ArrayList<>();
         Paper.init(News_Fragment_View.getContext());
 
-        local_dataList = new ArrayList<>();
+        if (Paper.book().read(News_API_Name) != null)
+        {
+            IslocalData = true;
+        }
+
 
         progressBar = News_Fragment_View.findViewById(R.id.progress_circular);
         refreshLayout = News_Fragment_View.findViewById(R.id.refresh_news_layout);
         recyclerView = News_Fragment_View.findViewById(R.id.news_recycler_view);
-       recyclerView.setHasFixedSize(true);
-       recyclerView.setLayoutManager(new LinearLayoutManager(News_Fragment_View.getContext()));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(News_Fragment_View.getContext()));
 
-       if (Paper.book().read(Common.Mashable)!= null)
+       if (IslocalData != false)
         {
+            local_dataList = Paper.book().read(News_API_Name);
+
             refreshLayout.post(new Runnable() {
                 @Override
                 public void run()
@@ -104,8 +115,7 @@ public class News_fragment extends Fragment implements ItemClickListner {
         }
         else
         {
-            //Check_Internet_Connection();
-            progressBar.setVisibility(View.VISIBLE);
+            Check_Internet_Connection();
         }
 
         refreshLayout.setColorSchemeResources(R.color.colorPrimary,
@@ -126,53 +136,22 @@ public class News_fragment extends Fragment implements ItemClickListner {
 
     private void Check_Internet_Connection() {
 
-        if (Common.isConnectedToInternet(getActivity()))
+        if (Common.isConnectedToInternet())
         {
-            Log.d(TAG, "Check_Internet_Connection: " +"checked");
+            Log.d(TAG, "Check_Internet_Connection: ");
+            progressBar.setVisibility(View.VISIBLE);
             InitRetorFit();
-            }
+            getNews_data();
+        }
         else
             {
-
             Toast.makeText(getActivity(), "Please Check your internet Connection !", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void Load_Data(String news_API_Name) {
-
-        switch (Common.Mashable)
-        {
-            case Common.Mashable :
-            {
-                local_dataList =  Paper.book().read(Common.Mashable);
-                Init_recycler_News(Common.Mashable);
-                return;
-            }
-            case Common.BusinessInsider :
-            {
-                local_dataList =  Paper.book().read(Common.BusinessInsider);
-                Init_recycler_News(Common.BusinessInsider);
-                return;
-            }
-
-            default:
-                return;
-        }
-
-    }
-
-    private void Init_recycler_News(String API_name)
-    {
-                news_adapter = new News_Adapter(local_dataList,this);
-                refreshLayout.setRefreshing(false);
-                recyclerView.setAdapter(news_adapter);
-                news_adapter.setOnItemClickListner(News_fragment.this);
-
-    }
-
     private void InitRetorFit() {
-        api_service = RetrofitClient.getInstance(Common.TechCrunch_URL).create(API_Service.class);
-        getNews_data();
+        api_service = RetrofitClient.getInstance(Common.APIS_URL).create(API_Service.class);
+        Log.d(TAG, "InitRetorFit: ");
     }
 
 
@@ -180,11 +159,12 @@ public class News_fragment extends Fragment implements ItemClickListner {
     //Getting the data from the API
     private void getNews_data()
     {
-        Call<TechCrunch> call =  api_service.getTechCrunch_News("business",Common.TechCrunch_API_KEY);
+        Log.d(TAG, "getNews_data: ");
+        Call<news_api> call =  api_service.get_News_Json(Source_API_Name,Common.API_KEY);
 
-        call.enqueue(new Callback<TechCrunch>() {
+        call.enqueue(new Callback<news_api>() {
             @Override
-            public void onResponse(Call<TechCrunch> call, Response<TechCrunch> response) {
+            public void onResponse(Call<news_api> call, Response<news_api> response) {
 
                 if (!response.isSuccessful()) {
                     Log.d(TAG, "onResponse: error"+ response.code() + response.message());
@@ -192,33 +172,75 @@ public class News_fragment extends Fragment implements ItemClickListner {
                 }
 
 
-                techCrunch = response.body();
+                    news_api news_api = response.body();
 
-                if (Paper.book().read(Common.Mashable) == null ||
-                        Paper.book().read(Common.BusinessInsider) == null)
-                {
 
-               local_dataList.addAll(techCrunch.getArticles());
-               SaveInLocal(local_dataList);
+                    local_dataList.addAll(news_api.getArticles());
+                    SaveInLocal(local_dataList);
                     progressBar.setVisibility(View.GONE);
-                }
 
             }
 
             @Override
-            public void onFailure(Call<TechCrunch> call, Throwable t) {
+            public void onFailure(Call<news_api> call, Throwable t) {
                 Log.d(TAG, "onFailure: "+ t.getMessage());
             }
         });
 
     }
 
-    private void SaveInLocal(ArrayList<News> arraylist) {
-        Paper.book().write(Common.TechCrunch,arraylist);
-        Paper.book().write(Common.Mashable,arraylist);
-        Paper.book().write(Common.BusinessInsider,arraylist);
-        Load_Data(News_API_Name);
+    private void SaveInLocal(ArrayList<NewsArticles> arraylist)
+    {
+        if (IslocalData != false)
+        {
+            Log.d(TAG, "SaveInLocal: updaet");
+            Paper.book().delete(News_API_Name);
+            Log.d(TAG, "SaveInLocal: "+News_API_Name);
+            Paper.book().write(News_API_Name,arraylist);
+            Load_Data(News_API_Name);
+        }
+        else if(IslocalData == false)
+        {
+            Log.d(TAG, "SaveInLocal: ERROR");
+            if (arraylist.size() != 0)
+            {
+                Paper.book().write(News_API_Name,arraylist);
+                Load_Data(News_API_Name);
+            }
+
+        }
+        else
+        {
+            Log.d(TAG, "SaveInLocal: new");
+            Paper.book().write(News_API_Name,arraylist);
+            Load_Data(News_API_Name);
+        }
+
     }
+
+
+    private void Load_Data(String news_API_Name)
+    {
+        Log.d(TAG, "Load_Data: ");
+        local_dataList =  Paper.book().read(news_API_Name);
+        Init_recycler_News();
+        news_adapter.notifyDataSetChanged();
+
+
+
+    }
+
+    private void Init_recycler_News()
+    {
+        Log.d(TAG, "Init_recycler_News: ");
+
+                news_adapter = new News_Adapter(local_dataList,this);
+                refreshLayout.setRefreshing(false);
+                recyclerView.setAdapter(news_adapter);
+                news_adapter.setOnItemClickListner(News_fragment.this);
+
+    }
+
 
 
     @Override
