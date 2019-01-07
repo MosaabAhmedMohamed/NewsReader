@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mosaab.newsreader.Interface.ItemClickListner;
@@ -63,7 +64,7 @@ public class News_Adapter extends RecyclerView.Adapter<News_Adapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         protected CardView news_card;
-        protected CircleImageView news_iamge;
+        protected ImageView news_iamge;
         protected TextView news_title,news_desc;
 
         public ViewHolder(View single_news_item) {
