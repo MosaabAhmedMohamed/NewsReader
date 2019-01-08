@@ -1,9 +1,8 @@
 package com.example.mosaab.newsreader.ViewHolder;
 
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,7 +16,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.mosaab.newsreader.Common.Common;
 import com.example.mosaab.newsreader.Interface.ItemClickListner;
 import com.example.mosaab.newsreader.Model.NewsArticles;
@@ -274,8 +272,5 @@ public class News_fragment extends Fragment implements ItemClickListner {
 
     @Override
     public void onItemClick(View view, int position) {
-
-        Toast.makeText(getActivity(), String.valueOf(position), Toast.LENGTH_SHORT).show();
-
     }
 }

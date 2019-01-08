@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_color"
-    tools:context=".ViewHolder.MainActivity">
-
-
-    <include
-        android:id="@+id/tablayt"
-        layout="@layout/tablayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ></include>
-
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ViewHolder.News_activiy"
+    tools:showIn="@layout/app_bar_news_activiy">
     <android.support.v4.view.ViewPager
         android:id="@+id/mainViewPager"
         android:layout_width="match_parent"
@@ -26,7 +17,4 @@
         app:layout_constraintTop_toBottomOf="@+id/tablayt">
 
     </android.support.v4.view.ViewPager>
-
-
-
 </android.support.constraint.ConstraintLayout>

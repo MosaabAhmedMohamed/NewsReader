@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_add_news_provider"
+            android:icon="@drawable/ic_library_add_black_24dp"
+            android:title="Add provider" />
+        <item
+            android:id="@+id/nav_delete_news_provider"
+            android:icon="@drawable/ic_remove_circle_outline_black_24dp"
+            android:title="Remove provider " />
+
+    </group>
+
+
+</menu>

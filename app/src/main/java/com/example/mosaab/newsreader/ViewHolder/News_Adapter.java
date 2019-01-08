@@ -1,12 +1,15 @@
 package com.example.mosaab.newsreader.ViewHolder;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,8 +49,9 @@ public class News_Adapter extends RecyclerView.Adapter<News_Adapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
+        viewHolder.puplished_At.setText("Published At : "+news_ArrayList.get(i).getPublishedAt());
         viewHolder.news_title.setText(news_ArrayList.get(i).getTitle());
-        viewHolder.news_desc.setText(news_ArrayList.get(i).getDescription());
+
         if (!TextUtils.isEmpty(news_ArrayList.get(i).getUrlToImage()))
         {
             Picasso.get().load(news_ArrayList.get(i).getUrlToImage()).into(viewHolder.news_iamge);
@@ -65,15 +69,32 @@ public class News_Adapter extends RecyclerView.Adapter<News_Adapter.ViewHolder> 
 
         protected CardView news_card;
         protected ImageView news_iamge;
-        protected TextView news_title,news_desc;
+        protected TextView news_title,puplished_At;
+        private Button preview_news_btn;
 
-        public ViewHolder(View single_news_item) {
+
+        public ViewHolder(final View single_news_item) {
             super(single_news_item);
 
             news_card = single_news_item.findViewById(R.id.news_card);
             news_iamge = single_news_item.findViewById(R.id.news_image);
             news_title = single_news_item.findViewById(R.id.news_title);
-            news_desc = single_news_item.findViewById(R.id.news_desc);
+            puplished_At = single_news_item.findViewById(R.id.news_puplished_atTV);
+            preview_news_btn = single_news_item.findViewById(R.id.preview_news_btn);
+
+
+            preview_news_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent preview_intent = new Intent(single_news_item.getContext(),Preview_news.class);
+                    preview_intent.putExtra("NewsDetial_Title",news_ArrayList.get(getAdapterPosition()).getTitle());
+                    preview_intent.putExtra("NewsDetial_Date",news_ArrayList.get(getAdapterPosition()).getPublishedAt());
+                    preview_intent.putExtra("NewsDetial_image",news_ArrayList.get(getAdapterPosition()).getUrlToImage());
+                    preview_intent.putExtra("NewsDetial_content",news_ArrayList.get(getAdapterPosition()).getContent());
+                    preview_intent.putExtra("NewsDetial_url",news_ArrayList.get(getAdapterPosition()).getUrl());
+                    single_news_item.getContext().startActivity(preview_intent);
+                }
+            });
 
             news_card.setOnClickListener(new View.OnClickListener() {
                 @Override

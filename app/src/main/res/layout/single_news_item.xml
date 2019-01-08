@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/news_card"
@@ -10,56 +9,78 @@
     app:cardElevation="8dp"
     android:layout_margin="8dp"
     >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="5"
+            android:orientation="horizontal"
+            >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-        <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/news_image"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/ic_launcher_background"
-            android:elevation="16dp"
-            />
-
-
-        <TextView
-            android:id="@+id/news_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:textAllCaps="false"
-            android:layout_toRightOf="@id/news_image"
-            android:layout_centerHorizontal="true"
-            android:textAlignment="center"
-            android:text="Title"
-            android:textColor="@color/colorPrimary"
-            android:textSize="22sp"
-            />
-
-        <TextView
-            android:id="@+id/news_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
-            android:textAllCaps="false"
-            android:layout_toRightOf="@id/news_image"
-            android:layout_centerHorizontal="true"
-            android:textAlignment="center"
-            android:text="Description"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
-            android:layout_below="@id/news_title"
-            />
+            <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/news_image"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_background"
+                android:elevation="16dp"
+                />
 
 
-    </RelativeLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/news_puplished_atTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:textAllCaps="false"
+                    android:textAlignment="textStart"
+                    android:text="Published At : "
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12sp"
+                    />
+
+                <TextView
+                    android:id="@+id/news_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:textAllCaps="false"
+                    android:textAlignment="textStart"
+                    android:text="Title"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    />
+
+                <Button
+                    android:id="@+id/preview_news_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Preview"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/ripple_effect_with_round_edge_btn_edt"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
 
 </android.support.v7.widget.CardView>
