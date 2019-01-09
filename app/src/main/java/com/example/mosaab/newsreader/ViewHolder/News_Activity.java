@@ -26,6 +26,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mosaab.newsreader.Common.Common;
 import com.example.mosaab.newsreader.Model.LocalSavedAPIS;
@@ -34,7 +35,9 @@ import com.example.mosaab.newsreader.R;
 import com.example.mosaab.newsreader.Service.loadDataScheduler;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import io.paperdb.Paper;
 
@@ -76,7 +79,7 @@ public class News_Activity extends AppCompatActivity
         providers_list = new ArrayList<>();
         Saved_APIS = new ArrayList<>();
         Paper.init(this);
-        //setSavedAPIS();
+        setSavedAPIS();
 
         appBarLayout = findViewById(R.id.appbar);
         tabLayout = findViewById(R.id.TabLayout);
@@ -88,7 +91,7 @@ public class News_Activity extends AppCompatActivity
         if (Paper.book().read(Common.SavedAPIS_Key) != null)
         {
             Saved_APIS = Paper.book().read(Common.SavedAPIS_Key);
-            Init_APIS_list(Saved_APIS);
+            Init_APIS_list(Saved_APIS, false);
         }
 
         update_data_every_10Mintes();
@@ -141,7 +144,7 @@ public class News_Activity extends AppCompatActivity
 
 
 
-    private void Init_APIS_list(ArrayList<LocalSavedAPIS> saved_apis) {
+    private void Init_APIS_list(ArrayList<LocalSavedAPIS> saved_apis, boolean UpdateFragment) {
 
         iterator = saved_apis.iterator();
 
@@ -149,7 +152,12 @@ public class News_Activity extends AppCompatActivity
         {
             LocalSavedAPIS item = iterator.next();
 
-            Fragment_Adapter.addFragmentPage(News_fragment.newInstance(item.getKeySavedData(),item.getApiSourceName(),item.isWebview()), item.getTapsName());
+            Fragment_Adapter.addFragmentPage(News_fragment.newInstance(
+                    item.getKeySavedData(),
+                    item.getApiSourceName(),
+                    item.isWebview()),
+                    item.getTapsName(),
+                    UpdateFragment);
 
         }
 
@@ -183,6 +191,10 @@ public class News_Activity extends AppCompatActivity
         if (provider_fragment_checked)
         {
             appBarLayout.setVisibility(View.VISIBLE);
+            Saved_APIS = Paper.book().read(Common.SavedAPIS_Key);
+            Fragment_Adapter = new View_Pager_adapter(getSupportFragmentManager());
+            Init_APIS_list(Saved_APIS,true);
+
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -288,20 +300,44 @@ public class News_Activity extends AppCompatActivity
 
       if (Paper.book().read(Common.SavedAPIS_Key) != null )
         {
+            Iterator<Providers> providersIterator;
+            ArrayList uniqeProviders = new ArrayList();
+            providersIterator = providers_list.iterator();
+
             Log.d(TAG, "save_new_provider_inLocal: "+Paper.book().read(Common.SavedAPIS_Key).toString());
             providers_list = Paper.book().read(Common.SavedProviders_list);
             Saved_APIS = Paper.book().read(Common.SavedAPIS_Key);
 
-            providers_list.add(new Providers(localSavedAPIS.getApiSourceName(),true));
-            Saved_APIS.add(localSavedAPIS);
 
-            Paper.book().delete(Common.SavedProviders_list);
-            Paper.book().delete(Common.SavedAPIS_Key);
-            Paper.book().write(Common.SavedProviders_list,providers_list);
-            Paper.book().write(Common.SavedAPIS_Key,Saved_APIS);
+            while (providersIterator.hasNext())
+            {
+               Providers item = providersIterator.next();
+               uniqeProviders.add(item.getProvider_name());
+            }
+
+            if (!uniqeProviders.contains(localSavedAPIS.getApiSourceName()))
+            {
+                providers_list.add(new Providers(localSavedAPIS.getApiSourceName(),true));
+                Saved_APIS.add(localSavedAPIS);
+
+                Paper.book().delete(Common.SavedProviders_list);
+                Paper.book().delete(Common.SavedAPIS_Key);
+                Paper.book().write(Common.SavedProviders_list,providers_list);
+                Paper.book().write(Common.SavedAPIS_Key,Saved_APIS);
+                Fragment_Adapter = new View_Pager_adapter(getSupportFragmentManager());
+            }
+           else
+            {
+                Toast.makeText(this, "This news provider is exist !!", Toast.LENGTH_SHORT).show();
+            }
+
+
+
 
 
         }
+
+
     }
 
 

@@ -114,6 +114,7 @@ public class Providers_List extends Fragment implements ItemClickListner {
                         Paper.book().delete(Common.SavedProviders_list);
                         Paper.book().delete(Common.SavedAPIS_Key);
                         Paper.book().write(Common.SavedAPIS_Key,savedAPISList);
+                        Log.d(TAG, "onItemClick: " + Paper.book().read(Common.SavedAPIS_Key).toString());
                         Paper.book().write(Common.SavedProviders_list,provider_list);
 
                     }
