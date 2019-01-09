@@ -16,6 +16,7 @@ public class Common {
     public static final String BusinessInsiderSource = "business-insider";
 
     public static final String SavedAPIS_Key = "SavedAPIS_Key";
+    public static final String SavedProviders_list = "Providers_List";
 
     public static final String APIS_URL = "https://newsapi.org/v2/";
 

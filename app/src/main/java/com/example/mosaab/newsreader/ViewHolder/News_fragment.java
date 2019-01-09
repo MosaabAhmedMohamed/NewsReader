@@ -292,7 +292,9 @@ public class News_fragment extends Fragment implements ItemClickListner {
 
     }
 
+
     @Override
-    public void onItemClick(View view, int position) {
+    public void onItemClick(View view, int postion, boolean state) {
+
     }
 }
