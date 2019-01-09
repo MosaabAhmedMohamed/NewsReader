@@ -9,9 +9,9 @@
             android:icon="@drawable/ic_library_add_black_24dp"
             android:title="Add provider" />
         <item
-            android:id="@+id/nav_delete_news_provider"
+            android:id="@+id/nav_news_provider"
             android:icon="@drawable/ic_remove_circle_outline_black_24dp"
-            android:title="Remove provider " />
+            android:title="news providers " />
 
     </group>
 

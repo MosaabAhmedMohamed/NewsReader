@@ -1,6 +1,7 @@
 package com.example.mosaab.newsreader.ViewHolder;
 
 import android.app.AlarmManager;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -9,8 +10,10 @@ import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +23,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mosaab.newsreader.Common.Common;
 import com.example.mosaab.newsreader.Model.LocalSavedAPIS;
@@ -31,10 +40,10 @@ import java.util.Iterator;
 
 import io.paperdb.Paper;
 
-public class News_activiy extends AppCompatActivity
+public class News_Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "News_activiy";
+    private static final String TAG = "News_Activity";
 
 
 
@@ -44,9 +53,10 @@ public class News_activiy extends AppCompatActivity
     private View_Pager_adapter Fragment_Adapter;
 
 
-    ArrayList<LocalSavedAPIS> Saved_APIS;
-    Iterator<LocalSavedAPIS> iterator ;
+    private ArrayList<LocalSavedAPIS> Saved_APIS;
+    private Iterator<LocalSavedAPIS> iterator ;
 
+    private boolean IsWebview = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +74,7 @@ public class News_activiy extends AppCompatActivity
 
         Saved_APIS = new ArrayList<>();
         Paper.init(this);
-        setSavedAPIS();
+        //setSavedAPIS();
 
         tabLayout = findViewById(R.id.TabLayout);
         mainViewPager = findViewById(R.id.mainViewPager);
@@ -76,7 +86,6 @@ public class News_activiy extends AppCompatActivity
         {
             Saved_APIS = Paper.book().read(Common.SavedAPIS_Key);
             Init_APIS_list(Saved_APIS);
-
         }
 
         update_data_every_10Mintes();
@@ -113,10 +122,10 @@ public class News_activiy extends AppCompatActivity
 
     private void setSavedAPIS()
     {
-        Saved_APIS.add(new LocalSavedAPIS(Common.TECHCrunchSource,Common.TechCrunch,"Tech Crunch"));
-        Saved_APIS.add(new LocalSavedAPIS(Common.MashableSource,Common.Mashable,Common.Mashable));
-        Saved_APIS.add(new LocalSavedAPIS(Common.BusinessInsiderSource,Common.BusinessInsider,Common.BusinessInsider));
-        Saved_APIS.add(new LocalSavedAPIS("cnn","cnn","CNN"));
+        Saved_APIS.add(new LocalSavedAPIS(Common.TECHCrunchSource,Common.TechCrunch,"Tech Crunch",false));
+        Saved_APIS.add(new LocalSavedAPIS(Common.MashableSource,Common.Mashable,Common.Mashable,false));
+        Saved_APIS.add(new LocalSavedAPIS(Common.BusinessInsiderSource,Common.BusinessInsider,Common.BusinessInsider,false));
+        Saved_APIS.add(new LocalSavedAPIS("cnn","cnn","CNN",false));
 
 
         Paper.book().write(Common.SavedAPIS_Key,Saved_APIS);
@@ -132,7 +141,8 @@ public class News_activiy extends AppCompatActivity
         while (iterator.hasNext())
         {
             LocalSavedAPIS item = iterator.next();
-            Fragment_Adapter.addFragmentPage(News_fragment.newInstance(item.getKeySavedData(),item.getApiSourceName()), item.getTapsName());
+
+            Fragment_Adapter.addFragmentPage(News_fragment.newInstance(item.getKeySavedData(),item.getApiSourceName(),item.isWebview()), item.getTapsName());
 
         }
 
@@ -179,12 +189,102 @@ public class News_activiy extends AppCompatActivity
 
         if (id == R.id.nav_add_news_provider) {
             // Handle the camera action
-        } else if (id == R.id.nav_delete_news_provider) {
+            Show_add_provider_dialog();
+        } else if (id == R.id.nav_news_provider) {
 
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.content_main_,new Providers_List());
+            fragmentTransaction.addToBackStack("");
+            fragmentTransaction.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void Show_add_provider_dialog()
+    {
+        final Dialog builder = new Dialog(this);
+
+        View view = LayoutInflater.from(this).inflate(R.layout.add_news_provider, null);
+
+        RadioButton radio_Source_btn,radio_Webview_btn;
+        TextView title =  view.findViewById(R.id.add_news_provider_title);
+        final EditText provider_name_edt = view.findViewById(R.id.add_provider_et);
+        radio_Source_btn = view.findViewById(R.id.radio_Source_btn);
+        radio_Webview_btn = view.findViewById(R.id.radio_Webview_btn);
+        Button dismiss = view.findViewById(R.id.dismiss_btn);
+        Button confirm = view.findViewById(R.id.confirm_btn);
+
+
+
+        title.setText("Please make sure you are connected to Internet");
+
+        //check provider
+        radio_Source_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                {
+                    provider_name_edt.setHint(" Source API name");
+                    IsWebview = false;
+
+                }
+            }
+        });
+        
+        radio_Webview_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked)
+                {
+                    provider_name_edt.setHint(" Website name ");
+                    IsWebview = true;
+
+                }
+            }
+        });
+
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String Api_name = provider_name_edt.getText().toString();
+                LocalSavedAPIS localSavedAPIS = new LocalSavedAPIS(Api_name,Api_name,Api_name,IsWebview);
+                save_new_provider_inLocal(localSavedAPIS);
+                builder.dismiss();
+            }
+        });
+
+        dismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                builder.dismiss();
+            }
+        });
+
+        builder.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        builder.setContentView(view);
+        builder.show();
+
+    }
+
+    private void save_new_provider_inLocal(LocalSavedAPIS localSavedAPIS) {
+
+      if (Paper.book().read(Common.SavedAPIS_Key) != null )
+        {
+            Log.d(TAG, "save_new_provider_inLocal: "+Paper.book().read(Common.SavedAPIS_Key).toString());
+            Saved_APIS = Paper.book().read(Common.SavedAPIS_Key);
+            Saved_APIS.add(localSavedAPIS);
+            Paper.book().delete(Common.SavedAPIS_Key);
+            Paper.book().write(Common.SavedAPIS_Key,Saved_APIS);
+            Log.d(TAG, "save_new_provider_inLocal: "+ Paper.book().read(Common.SavedAPIS_Key).toString());
+
+
+        }
+    }
+
+
 }

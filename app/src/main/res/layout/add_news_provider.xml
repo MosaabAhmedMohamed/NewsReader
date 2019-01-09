@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_gravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="32dp"
+    android:elevation="32dp"
+    android:layout_margin="8dp"
+    android:background="@drawable/background_color"
+    android:backgroundTint="@color/colorPrimaryDark"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_color"
+        >
+        <TextView
+            android:id="@+id/add_news_provider_title"
+            android:padding="2dp"
+            android:layout_marginStart="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add news provider"
+            android:textColor="@color/textTabBright"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            />
+
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_below="@id/add_news_provider_title"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/radio_Source_btn"
+                android:background="@drawable/ripple_effect_with_round_edge_btn_edt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="add from source API"
+                android:textSize="18sp"
+                android:paddingEnd="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:drawableRight="@drawable/ic_library_add_black_24dp"
+                android:textColor="@color/textTabBright"/>
+            <RadioButton
+                android:id="@+id/radio_Webview_btn"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:paddingEnd="24dp"
+                android:background="@drawable/ripple_effect_with_round_edge_btn_edt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add a Website"
+                android:textSize="18sp"
+                android:drawableRight="@drawable/ic_library_add_black_24dp"
+                android:textColor="@color/textTabBright"/>
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/add_provider_et"
+            android:layout_below="@id/radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="16sp"
+            android:layout_marginBottom="8dp"
+            android:hint=""
+            android:background="@drawable/ripple_effect_with_round_edge_btn_edt"
+            />
+
+        <LinearLayout
+            android:layout_below="@id/add_provider_et"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/dismiss_btn"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:textStyle="bold"
+                android:text="Dismiss"
+                android:background="@drawable/ripple_effect_with_round_edge_btn_edt"
+                />
+
+            <Button
+                android:id="@+id/confirm_btn"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:textStyle="bold"
+                android:text="Confirm"
+                android:background="@drawable/ripple_effect_with_round_edge_btn_edt"
+                />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
+

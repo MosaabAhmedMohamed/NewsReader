@@ -14,12 +14,11 @@
         android:roundIcon="@mipmap/newslogo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <receiver android:name=".Service.loadDataScheduler" />
 
         <activity android:name=".ViewHolder.Preview_news" />
         <activity
-            android:name=".ViewHolder.News_activiy"
+            android:name=".ViewHolder.News_Activity"
             android:label="@string/title_activity_news_activiy"
             android:theme="@style/AppTheme">
             <intent-filter>
