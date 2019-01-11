@@ -11,6 +11,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +67,7 @@ public class News_Activity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_activiy);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("News Reader");
         setSupportActionBar(toolbar);
 
         Init_UI();
@@ -79,7 +81,12 @@ public class News_Activity extends AppCompatActivity
         providers_list = new ArrayList<>();
         Saved_APIS = new ArrayList<>();
         Paper.init(this);
-        setSavedAPIS();
+       // setSavedAPIS();
+        if (Paper.book().read(Common.SavedAPIS_Key) == null)
+        {
+            setSavedAPIS();
+            Log.d(TAG, "Init_UI: null");
+        }
 
         appBarLayout = findViewById(R.id.appbar);
         tabLayout = findViewById(R.id.TabLayout);
@@ -90,9 +97,15 @@ public class News_Activity extends AppCompatActivity
 
         if (Paper.book().read(Common.SavedAPIS_Key) != null)
         {
+            Log.d(TAG, "Init_UI: "+ "saved APIS");
             Saved_APIS = Paper.book().read(Common.SavedAPIS_Key);
             Init_APIS_list(Saved_APIS, false);
         }
+
+      /*  if(Paper.book().read(Common.SavedProviders_list) != null)
+        {
+            providers_list = Paper.book().read(Common.SavedProviders_list);
+        }*/
 
         update_data_every_10Mintes();
 
@@ -131,7 +144,6 @@ public class News_Activity extends AppCompatActivity
         Saved_APIS.add(new LocalSavedAPIS(Common.TECHCrunchSource,Common.TechCrunch,"Tech Crunch",false));
         Saved_APIS.add(new LocalSavedAPIS(Common.MashableSource,Common.Mashable,Common.Mashable,false));
         Saved_APIS.add(new LocalSavedAPIS(Common.BusinessInsiderSource,Common.BusinessInsider,Common.BusinessInsider,false));
-        Saved_APIS.add(new LocalSavedAPIS("cnn","cnn","CNN",false));
 
         providers_list.add(new Providers(Common.TECHCrunchSource,true));
         providers_list.add(new Providers(Common.MashableSource,true));
@@ -244,7 +256,7 @@ public class News_Activity extends AppCompatActivity
 
 
 
-        title.setText("Please make sure you are connected to Internet");
+        title.setText("Add new Provider");
 
         //check provider
         radio_Source_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -252,6 +264,7 @@ public class News_Activity extends AppCompatActivity
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked)
                 {
+                    provider_name_edt.setVisibility(View.VISIBLE);
                     provider_name_edt.setHint(" Source API name");
                     IsWebview = false;
 
@@ -265,6 +278,7 @@ public class News_Activity extends AppCompatActivity
 
                 if (isChecked)
                 {
+                    provider_name_edt.setVisibility(View.VISIBLE);
                     provider_name_edt.setHint(" Website name ");
                     IsWebview = true;
 
