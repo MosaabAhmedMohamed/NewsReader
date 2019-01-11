@@ -5,12 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.mosaab.newsreader.Common.Common;
 import com.example.mosaab.newsreader.Interface.ItemClickListner;
 import com.example.mosaab.newsreader.Model.NewsArticles;
 import com.example.mosaab.newsreader.R;
@@ -22,17 +25,12 @@ public class News_Adapter extends RecyclerView.Adapter<News_Adapter.ViewHolder> 
 
     private static final String TAG ="News_Adapter" ;
     private ArrayList<NewsArticles> news_ArrayList;
-    private ItemClickListner itemClickListner;
 
-    public void setOnItemClickListner(ItemClickListner listner)
+
+    public News_Adapter(ArrayList<NewsArticles> news_ArrayList)
     {
-        itemClickListner=listner;
-    }
-
-    public News_Adapter(ArrayList<NewsArticles> news_ArrayList, ItemClickListner itemClickListner) {
 
         this.news_ArrayList = news_ArrayList;
-        this.itemClickListner = itemClickListner;
     }
 
     @NonNull
@@ -45,12 +43,15 @@ public class News_Adapter extends RecyclerView.Adapter<News_Adapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-        viewHolder.puplished_At.setText("Published At : "+news_ArrayList.get(i).getPublishedAt());
+        viewHolder.puplished_At.setText("Published At : "+ (news_ArrayList.get(i).getPublishedAt()));
         viewHolder.news_title.setText(news_ArrayList.get(i).getTitle());
+        Log.d(TAG, "onBindViewHolder: "+news_ArrayList.get(i).getTitle());
 
         if (!TextUtils.isEmpty(news_ArrayList.get(i).getUrlToImage()))
         {
             Picasso.get().load(news_ArrayList.get(i).getUrlToImage()).into(viewHolder.news_iamge);
+            Picasso.get().load(news_ArrayList.get(i).getUrlToImage());
+
 
         }
 
@@ -92,22 +93,6 @@ public class News_Adapter extends RecyclerView.Adapter<News_Adapter.ViewHolder> 
                 }
             });
 
-            news_card.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    if (itemClickListner != null)
-                    {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION)
-                        {
-                            itemClickListner.onItemClick(v,getAdapterPosition(),false);
-                        }
-
-                    }
-
-                }
-            });
         }
 
 

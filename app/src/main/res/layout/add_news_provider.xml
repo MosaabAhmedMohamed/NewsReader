@@ -8,14 +8,12 @@
     app:cardCornerRadius="32dp"
     android:elevation="32dp"
     android:layout_margin="8dp"
-    android:background="@drawable/background_color"
-    android:backgroundTint="@color/colorPrimaryDark"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_color"
+        android:background="@color/textTabBright"
         >
         <TextView
             android:id="@+id/add_news_provider_title"
@@ -27,53 +25,24 @@
             android:textColor="@color/textTabBright"
             android:textAllCaps="false"
             android:textSize="18sp"
+            android:layout_marginTop="4dp"
+            android:textAlignment="center"
             />
-
-        <RadioGroup
-            android:id="@+id/radio_group"
-            android:layout_below="@id/add_news_provider_title"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <RadioButton
-                android:id="@+id/radio_Source_btn"
-                android:background="@drawable/ripple_effect_with_round_edge_btn_edt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="add from source API"
-                android:textSize="18sp"
-                android:paddingEnd="24dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:drawableRight="@drawable/ic_library_add_black_24dp"
-                android:textColor="@color/textTabBright"/>
-            <RadioButton
-                android:id="@+id/radio_Webview_btn"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:paddingEnd="24dp"
-                android:background="@drawable/ripple_effect_with_round_edge_btn_edt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Add a Website"
-                android:textSize="18sp"
-                android:drawableRight="@drawable/ic_library_add_black_24dp"
-                android:textColor="@color/textTabBright"/>
-        </RadioGroup>
 
         <EditText
             android:id="@+id/add_provider_et"
-            android:layout_below="@id/radio_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:layout_marginTop="16sp"
             android:layout_marginBottom="8dp"
+            android:padding="12dp"
+            android:textColorHint="@color/textTabBright"
+            android:textColor="@color/textTabBright"
+            android:visibility="gone"
             android:hint=""
-            android:background="@drawable/ripple_effect_with_round_edge_btn_edt"
+            android:background="@drawable/button_shape"
             />
 
         <LinearLayout
@@ -94,7 +63,8 @@
                 android:layout_marginEnd="8dp"
                 android:textStyle="bold"
                 android:text="Dismiss"
-                android:background="@drawable/ripple_effect_with_round_edge_btn_edt"
+                android:textColor="@color/textTabBright"
+                android:background="@drawable/button_shape"
                 />
 
             <Button
@@ -108,7 +78,7 @@
                 android:layout_marginEnd="8dp"
                 android:textStyle="bold"
                 android:text="Confirm"
-                android:background="@drawable/ripple_effect_with_round_edge_btn_edt"
+                android:background="@drawable/button_shape_white"
                 />
 
         </LinearLayout>

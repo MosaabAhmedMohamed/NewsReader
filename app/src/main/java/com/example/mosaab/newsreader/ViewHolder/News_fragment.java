@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.example.mosaab.newsreader.Common.Common;
-import com.example.mosaab.newsreader.Interface.ItemClickListner;
 import com.example.mosaab.newsreader.Model.NewsArticles;
 import com.example.mosaab.newsreader.Model.news_api;
 import com.example.mosaab.newsreader.R;
@@ -28,17 +27,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class News_fragment extends Fragment implements ItemClickListner {
+public class News_fragment extends Fragment {
 
     private static final String pram1 = "pram1";
     private static final String pram2 = "pram2";
-    private static final String parm3 ="pram3";
 
     public static final String TAG = "News_fragment";
 
     private String News_API_Name;
     private String Source_API_Name;
-    private boolean IsWebView ;
     private boolean IslocalData = false;
 
     private View News_Fragment_View;
@@ -46,7 +43,6 @@ public class News_fragment extends Fragment implements ItemClickListner {
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
     private News_Adapter news_adapter;
-    private WebView webView;
 
     private ArrayList<NewsArticles> local_dataList;
     private API_Service api_service;
@@ -57,12 +53,11 @@ public class News_fragment extends Fragment implements ItemClickListner {
     }
 
 
-    public static News_fragment newInstance(String param1, String param2,boolean pram3) {
+    public static News_fragment newInstance(String param1, String param2) {
         News_fragment fragment = new News_fragment();
         Bundle args = new Bundle();
         args.putString(pram1, param1);
         args.putString(pram2, param2);
-        args.putBoolean(parm3,pram3);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,7 +68,6 @@ public class News_fragment extends Fragment implements ItemClickListner {
         if (getArguments() != null) {
             News_API_Name = getArguments().getString(pram1);
             Source_API_Name = getArguments().getString(pram2);
-            IsWebView = getArguments().getBoolean(parm3);
             Log.d(TAG, "onCreate: " + News_API_Name);
         }
     }
@@ -91,25 +85,8 @@ public class News_fragment extends Fragment implements ItemClickListner {
 
     private void Init_UI()
     {
-        webView = News_Fragment_View.findViewById(R.id.newswebView);
         refreshLayout = News_Fragment_View.findViewById(R.id.refresh_news_layout);
-        if (IsWebView)
-        {
-            refreshLayout.setVisibility(View.GONE);
-            webView.setVisibility(View.VISIBLE);
 
-            if (Common.isConnectedToInternet())
-            {
-                webView.getSettings().setJavaScriptEnabled(true);
-                webView.loadUrl(News_API_Name);
-            }
-            else
-            {
-                Show_alert_dialog();
-            }
-        }
-        else
-        {
             local_dataList = new ArrayList<>();
             Paper.init(News_Fragment_View.getContext());
 
@@ -133,6 +110,7 @@ public class News_fragment extends Fragment implements ItemClickListner {
                     public void run()
                     {
                         Load_Data(News_API_Name);
+                        Init_recycler_News();
                     }
                 });
             }
@@ -156,15 +134,13 @@ public class News_fragment extends Fragment implements ItemClickListner {
 
 
 
-
-    }
-
     private void Check_Internet_Connection() {
 
         if (Common.isConnectedToInternet())
         {
             Log.d(TAG, "Check_Internet_Connection: ");
             progressBar.setVisibility(View.VISIBLE);
+            refreshLayout.setRefreshing(false);
             InitRetorFit();
             getNews_data();
         }
@@ -200,10 +176,9 @@ public class News_fragment extends Fragment implements ItemClickListner {
 
                     news_api news_api = response.body();
 
-
-                    local_dataList.addAll(news_api.getArticles());
-                    SaveInLocal(local_dataList);
-                    progressBar.setVisibility(View.GONE);
+                local_dataList.clear();
+                local_dataList.addAll(news_api.getArticles());
+                SaveInLocal(local_dataList);
 
             }
 
@@ -221,17 +196,19 @@ public class News_fragment extends Fragment implements ItemClickListner {
         {
             Log.d(TAG, "SaveInLocal: updaet");
             Paper.book().delete(News_API_Name);
-            Log.d(TAG, "SaveInLocal: "+News_API_Name);
             Paper.book().write(News_API_Name,arraylist);
             Load_Data(News_API_Name);
+            progressBar.setVisibility(View.GONE);
+            news_adapter.notifyDataSetChanged();
         }
         else if(IslocalData == false)
         {
-            Log.d(TAG, "SaveInLocal: ERROR");
             if (arraylist.size() != 0)
             {
+                Paper.book().delete(News_API_Name);
                 Paper.book().write(News_API_Name,arraylist);
                 Load_Data(News_API_Name);
+
             }
 
         }
@@ -240,6 +217,9 @@ public class News_fragment extends Fragment implements ItemClickListner {
             Log.d(TAG, "SaveInLocal: new");
             Paper.book().write(News_API_Name,arraylist);
             Load_Data(News_API_Name);
+            progressBar.setVisibility(View.GONE);
+            news_adapter.notifyDataSetChanged();
+
         }
 
     }
@@ -249,8 +229,6 @@ public class News_fragment extends Fragment implements ItemClickListner {
     {
         Log.d(TAG, "Load_Data: ");
         local_dataList =  Paper.book().read(news_API_Name);
-        Init_recycler_News();
-        news_adapter.notifyDataSetChanged();
 
 
 
@@ -260,10 +238,10 @@ public class News_fragment extends Fragment implements ItemClickListner {
     {
         Log.d(TAG, "Init_recycler_News: ");
 
-                news_adapter = new News_Adapter(local_dataList,this);
-                refreshLayout.setRefreshing(false);
-                recyclerView.setAdapter(news_adapter);
-                news_adapter.setOnItemClickListner(News_fragment.this);
+        progressBar.setVisibility(View.GONE);
+        news_adapter = new News_Adapter(local_dataList);
+        refreshLayout.setRefreshing(false);
+        recyclerView.setAdapter(news_adapter);
 
     }
 
@@ -292,9 +270,4 @@ public class News_fragment extends Fragment implements ItemClickListner {
 
     }
 
-
-    @Override
-    public void onItemClick(View view, int postion, boolean state) {
-
-    }
 }

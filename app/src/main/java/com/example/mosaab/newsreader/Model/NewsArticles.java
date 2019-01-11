@@ -14,8 +14,6 @@ public class NewsArticles  {
     private String author;
 
 
-
-
     public String getPublishedAt() {
         return publishedAt;
     }

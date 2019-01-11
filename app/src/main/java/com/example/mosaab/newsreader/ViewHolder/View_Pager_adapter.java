@@ -27,10 +27,21 @@ public class View_Pager_adapter extends FragmentPagerAdapter {
             TabsName=new ArrayList<>();
         }
 
-        public void addFragmentPage(Fragment fragment,String fragmentName, boolean UpdateFragment ) {
+        public void addFragmentPage(Fragment fragment,String fragmentName ) {
 
             FragmentCategory.add(fragment);
             TabsName.add(fragmentName);
+        }
+
+        public void RemoveFragment(int position)
+        {
+
+
+
+
+            FragmentCategory.remove(position);
+            TabsName.remove(position);
+
         }
 
         @Override

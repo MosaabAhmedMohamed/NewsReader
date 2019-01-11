@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,60 +23,74 @@
             android:layout_height="wrap_content"
             android:visibility="visible"
             >
-            <LinearLayout
-                android:id="@+id/linearLayout"
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardview"
                 android:layout_width="match_parent"
-                android:layout_height="397dp"
-                android:layout_marginBottom="8dp"
-                android:orientation="vertical"
-                android:weightSum="10"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0">
+                app:layout_constraintVertical_bias="0.0"
+                android:layout_margin="4dp"
+                app:cardCornerRadius="8dp"
+                android:elevation="8dp"
+                >
 
-                <TextView
-                    android:id="@+id/news_detial_title_tv"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_weight="2"
-                    android:text="Title"
-                    android:textAlignment="textStart"
-                    android:textAllCaps="false"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/colorBackGround"
+                    >
 
-                <TextView
-                    android:id="@+id/news_detial_Date_tv"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_weight="1"
-                    android:text="Puplished At"
-                    android:textAlignment="textStart"
-                    android:textAllCaps="false"
-                    android:textSize="14sp" />
+                    <ImageView
+                        android:id="@+id/news_detial_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:elevation="16dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_launcher_background" />
 
-                <ImageView
-                    android:id="@+id/news_detial_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_weight="8"
-                    android:elevation="16dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_launcher_background" />
+                    <TextView
+                        android:id="@+id/news_detial_Date_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="Puplished At"
+                        android:textColor="@color/colorAccent"
+                        android:textAlignment="textStart"
+                        android:textAllCaps="false"
+                        android:textSize="14sp" />
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/news_detial_title_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="Title"
+                        android:textColor="@color/textTabBright"
+                        android:textAlignment="textStart"
+                        android:textAllCaps="false"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                </LinearLayout>
+
+
+
+
+            </android.support.v7.widget.CardView>
+
 
 
             <TextView
@@ -88,6 +102,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:text="content"
+                android:inputType="textMultiLine"
                 android:textAlignment="textStart"
                 android:textAllCaps="false"
                 android:textSize="16sp"
@@ -95,7 +110,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:layout_constraintTop_toBottomOf="@+id/cardview"
                 app:layout_constraintVertical_bias="0.0" />
 
             <Button
@@ -104,8 +119,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/ripple_effect_with_round_edge_btn_edt"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/button_shape_color_dark"
                 android:text="preview in Website"
+                android:textColor="@color/textTabBright"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textSize="16sp"
@@ -119,7 +137,19 @@
             />
         </android.support.constraint.ConstraintLayout>
 
-
+        <ProgressBar
+            android:id="@+id/progress_circular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:backgroundTint="@android:color/white"
+            />
 
     </RelativeLayout>
 

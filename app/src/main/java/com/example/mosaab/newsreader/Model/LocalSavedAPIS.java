@@ -3,13 +3,11 @@ package com.example.mosaab.newsreader.Model;
 public class LocalSavedAPIS {
 
     private String ApiSourceName, KeySavedData, TapsName;
-    private boolean IsWebview;
 
-    public LocalSavedAPIS(String apiSourceName, String keySavedData, String tapsName, boolean isWebview) {
+    public LocalSavedAPIS(String apiSourceName, String keySavedData, String tapsName) {
         ApiSourceName = apiSourceName;
         KeySavedData = keySavedData;
         TapsName = tapsName;
-        IsWebview = isWebview;
     }
 
     public String getApiSourceName() {
@@ -36,11 +34,5 @@ public class LocalSavedAPIS {
         TapsName = tapsName;
     }
 
-    public boolean isWebview() {
-        return IsWebview;
-    }
 
-    public void setWebview(boolean webview) {
-        IsWebview = webview;
-    }
 }

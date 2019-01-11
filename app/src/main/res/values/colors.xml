@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#A700FF</color>
-    <color name="colorPrimaryDark">#009BFC</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimaryDark">#FF090909</color>
+    <color name="colorPrimary">#00b488</color>
+    <color name="colorBackGround"> #323131</color>
+    <color name="colorAccent">#00b488</color>
 
     <color name="textTabLight">#7EC6FF</color>
     <color name="textTabBright">#FFFFFF</color>
+    <color name="textTabOff">#8f8f8e</color>
+
+
 </resources>

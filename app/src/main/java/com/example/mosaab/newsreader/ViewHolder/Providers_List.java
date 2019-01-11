@@ -1,6 +1,7 @@
 package com.example.mosaab.newsreader.ViewHolder;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.mosaab.newsreader.Common.Common;
 import com.example.mosaab.newsreader.Interface.ItemClickListner;
+import com.example.mosaab.newsreader.Interface.Update_Ptoviders_Callback;
 import com.example.mosaab.newsreader.Model.LocalSavedAPIS;
 import com.example.mosaab.newsreader.Model.Providers;
 import com.example.mosaab.newsreader.R;
@@ -23,7 +25,7 @@ import java.util.Iterator;
 import io.paperdb.Paper;
 
 
-public class Providers_List extends Fragment implements ItemClickListner {
+public class Providers_List extends Fragment implements ItemClickListner{
 
     public static final String TAG ="Providers_List";
 
@@ -34,12 +36,21 @@ public class Providers_List extends Fragment implements ItemClickListner {
     private ArrayList<LocalSavedAPIS> savedAPISList;
     private Iterator<LocalSavedAPIS> iterator;
     private View Provider_list_view;
+    private Update_Ptoviders_Callback update_ptoviders_callback;
 
 
     public Providers_List()
     {
         // Required empty public constructor
     }
+
+    @SuppressLint("ValidFragment")
+    public Providers_List(Update_Ptoviders_Callback update_ptoviders_callback)
+    {
+        this.update_ptoviders_callback = update_ptoviders_callback;
+        // Required empty public constructor
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,8 +96,10 @@ public class Providers_List extends Fragment implements ItemClickListner {
             if (provider_list.get(position).isActive_provider() == false)
             {
                 String provider = provider_list.get(position).getProvider_name();
-                savedAPISList.add(new LocalSavedAPIS(provider,provider,provider,false));
+                savedAPISList.add(new LocalSavedAPIS(provider,provider,provider));
                 provider_list.get(position).setActive_provider(true);
+
+                update_ptoviders_callback.onItemChecked(new LocalSavedAPIS(provider,provider,provider),true);
 
                 Paper.book().delete(Common.SavedProviders_list);
                 Paper.book().delete(Common.SavedAPIS_Key);
@@ -104,12 +117,15 @@ public class Providers_List extends Fragment implements ItemClickListner {
                 while (iterator.hasNext())
                 {
                     LocalSavedAPIS item = iterator.next();
+                    LocalSavedAPIS localSavedAPIS =item;
 
                     if (item.getApiSourceName().equals(provider_list.get(position).getProvider_name()))
                     {
 
                         iterator.remove();
                         provider_list.get(position).setActive_provider(false);
+
+                        update_ptoviders_callback.onItemChecked(item,false);
 
                         Paper.book().delete(Common.SavedProviders_list);
                         Paper.book().delete(Common.SavedAPIS_Key);
@@ -124,4 +140,6 @@ public class Providers_List extends Fragment implements ItemClickListner {
         }
 
     }
+
+
 }

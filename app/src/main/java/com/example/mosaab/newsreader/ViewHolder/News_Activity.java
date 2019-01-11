@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mosaab.newsreader.Common.Common;
+import com.example.mosaab.newsreader.Interface.Update_Ptoviders_Callback;
 import com.example.mosaab.newsreader.Model.LocalSavedAPIS;
 import com.example.mosaab.newsreader.Model.Providers;
 import com.example.mosaab.newsreader.R;
@@ -43,7 +44,7 @@ import java.util.Set;
 import io.paperdb.Paper;
 
 public class News_Activity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,Update_Ptoviders_Callback {
 
     private static final String TAG = "News_Activity";
 
@@ -60,8 +61,9 @@ public class News_Activity extends AppCompatActivity
     private ArrayList<LocalSavedAPIS> Saved_APIS;
     private Iterator<LocalSavedAPIS> iterator ;
 
-    private boolean IsWebview = false;
     private boolean provider_fragment_checked = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +83,7 @@ public class News_Activity extends AppCompatActivity
         providers_list = new ArrayList<>();
         Saved_APIS = new ArrayList<>();
         Paper.init(this);
-       // setSavedAPIS();
+        //setSavedAPIS();
         if (Paper.book().read(Common.SavedAPIS_Key) == null)
         {
             setSavedAPIS();
@@ -99,7 +101,7 @@ public class News_Activity extends AppCompatActivity
         {
             Log.d(TAG, "Init_UI: "+ "saved APIS");
             Saved_APIS = Paper.book().read(Common.SavedAPIS_Key);
-            Init_APIS_list(Saved_APIS, false);
+            Init_APIS_list(Saved_APIS);
         }
 
       /*  if(Paper.book().read(Common.SavedProviders_list) != null)
@@ -119,31 +121,14 @@ public class News_Activity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                //Change_Taps(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
-            }
-        });
-
 
     }
 
     private void setSavedAPIS()
     {
-        Saved_APIS.add(new LocalSavedAPIS(Common.TECHCrunchSource,Common.TechCrunch,"Tech Crunch",false));
-        Saved_APIS.add(new LocalSavedAPIS(Common.MashableSource,Common.Mashable,Common.Mashable,false));
-        Saved_APIS.add(new LocalSavedAPIS(Common.BusinessInsiderSource,Common.BusinessInsider,Common.BusinessInsider,false));
+        Saved_APIS.add(new LocalSavedAPIS(Common.TECHCrunchSource,Common.TechCrunch,"Tech Crunch"));
+        Saved_APIS.add(new LocalSavedAPIS(Common.MashableSource,Common.Mashable,Common.Mashable));
+        Saved_APIS.add(new LocalSavedAPIS(Common.BusinessInsiderSource,Common.BusinessInsider,Common.BusinessInsider));
 
         providers_list.add(new Providers(Common.TECHCrunchSource,true));
         providers_list.add(new Providers(Common.MashableSource,true));
@@ -156,7 +141,7 @@ public class News_Activity extends AppCompatActivity
 
 
 
-    private void Init_APIS_list(ArrayList<LocalSavedAPIS> saved_apis, boolean UpdateFragment) {
+    private void Init_APIS_list(ArrayList<LocalSavedAPIS> saved_apis) {
 
         iterator = saved_apis.iterator();
 
@@ -166,10 +151,8 @@ public class News_Activity extends AppCompatActivity
 
             Fragment_Adapter.addFragmentPage(News_fragment.newInstance(
                     item.getKeySavedData(),
-                    item.getApiSourceName(),
-                    item.isWebview()),
-                    item.getTapsName(),
-                    UpdateFragment);
+                    item.getApiSourceName()),
+                    item.getTapsName());
 
         }
 
@@ -203,9 +186,10 @@ public class News_Activity extends AppCompatActivity
         if (provider_fragment_checked)
         {
             appBarLayout.setVisibility(View.VISIBLE);
-            Saved_APIS = Paper.book().read(Common.SavedAPIS_Key);
-            Fragment_Adapter = new View_Pager_adapter(getSupportFragmentManager());
-            Init_APIS_list(Saved_APIS,true);
+
+            //Saved_APIS = Paper.book().read(Common.SavedAPIS_Key);
+            //Fragment_Adapter = new View_Pager_adapter(getSupportFragmentManager());
+            //Init_APIS_list(Saved_APIS);
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -225,11 +209,13 @@ public class News_Activity extends AppCompatActivity
         if (id == R.id.nav_add_news_provider) {
             // Handle the camera action
             Show_add_provider_dialog();
-        } else if (id == R.id.nav_news_provider) {
+        }
+        else if (id == R.id.nav_news_provider) {
+
 
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.coordinator_layout,new Providers_List());
-            fragmentTransaction.addToBackStack("");
+            fragmentTransaction.replace(R.id.coordinator_layout,new Providers_List(this));
+            fragmentTransaction.addToBackStack("providers_list");
             fragmentTransaction.commit();
             appBarLayout.setVisibility(View.GONE);
             provider_fragment_checked = true;
@@ -246,52 +232,24 @@ public class News_Activity extends AppCompatActivity
 
         View view = LayoutInflater.from(this).inflate(R.layout.add_news_provider, null);
 
-        RadioButton radio_Source_btn,radio_Webview_btn;
         TextView title =  view.findViewById(R.id.add_news_provider_title);
         final EditText provider_name_edt = view.findViewById(R.id.add_provider_et);
-        radio_Source_btn = view.findViewById(R.id.radio_Source_btn);
-        radio_Webview_btn = view.findViewById(R.id.radio_Webview_btn);
+
         Button dismiss = view.findViewById(R.id.dismiss_btn);
         Button confirm = view.findViewById(R.id.confirm_btn);
 
 
 
         title.setText("Add new Provider");
-
-        //check provider
-        radio_Source_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                {
-                    provider_name_edt.setVisibility(View.VISIBLE);
-                    provider_name_edt.setHint(" Source API name");
-                    IsWebview = false;
-
-                }
-            }
-        });
-        
-        radio_Webview_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked)
-                {
-                    provider_name_edt.setVisibility(View.VISIBLE);
-                    provider_name_edt.setHint(" Website name ");
-                    IsWebview = true;
-
-                }
-            }
-        });
+        provider_name_edt.setVisibility(View.VISIBLE);
+        provider_name_edt.setHint(" Source API name");
 
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String Api_name = provider_name_edt.getText().toString();
-                LocalSavedAPIS localSavedAPIS = new LocalSavedAPIS(Api_name,Api_name,Api_name,IsWebview);
+                LocalSavedAPIS localSavedAPIS = new LocalSavedAPIS(Api_name,Api_name,Api_name);
                 save_new_provider_inLocal(localSavedAPIS);
                 builder.dismiss();
             }
@@ -331,6 +289,11 @@ public class News_Activity extends AppCompatActivity
 
             if (!uniqeProviders.contains(localSavedAPIS.getApiSourceName()))
             {
+                Fragment_Adapter.addFragmentPage(News_fragment.newInstance(
+                        localSavedAPIS.getKeySavedData(),
+                        localSavedAPIS.getApiSourceName()),
+                        localSavedAPIS.getTapsName());
+
                 providers_list.add(new Providers(localSavedAPIS.getApiSourceName(),true));
                 Saved_APIS.add(localSavedAPIS);
 
@@ -338,7 +301,9 @@ public class News_Activity extends AppCompatActivity
                 Paper.book().delete(Common.SavedAPIS_Key);
                 Paper.book().write(Common.SavedProviders_list,providers_list);
                 Paper.book().write(Common.SavedAPIS_Key,Saved_APIS);
-                Fragment_Adapter = new View_Pager_adapter(getSupportFragmentManager());
+                providers_list = Paper.book().read(Common.SavedProviders_list);
+                Fragment_Adapter.notifyDataSetChanged();
+
             }
            else
             {
@@ -355,4 +320,63 @@ public class News_Activity extends AppCompatActivity
     }
 
 
+    @Override
+    public void onItemChecked(LocalSavedAPIS localSavedAPIS, boolean state) {
+        if (state == true)
+        {
+
+
+            iterator = Saved_APIS.iterator();
+            ArrayList<String> uniqeAPIS_list = new ArrayList<>();
+
+            while (iterator.hasNext())
+            {
+                LocalSavedAPIS item = iterator.next();
+
+                uniqeAPIS_list.add(item.getApiSourceName());
+            }
+
+            if (!uniqeAPIS_list.contains(localSavedAPIS.getApiSourceName()))
+            {
+                Saved_APIS.add(localSavedAPIS);
+
+                Fragment_Adapter.addFragmentPage(News_fragment.newInstance(
+                        localSavedAPIS.getKeySavedData(),
+                        localSavedAPIS.getApiSourceName()),
+                        localSavedAPIS.getTapsName());
+
+                Fragment_Adapter.notifyDataSetChanged();
+                Log.d(TAG, "onItemChecked: "+"saf");
+
+            }
+
+
+
+
+        }
+        else if (state == false)
+        {
+
+
+            int position = 0;
+            iterator = Saved_APIS.iterator();
+            while (iterator.hasNext())
+            {
+                LocalSavedAPIS item = iterator.next();
+
+                if (item.getApiSourceName().equals(localSavedAPIS.getApiSourceName()))
+                {
+                    Log.d(TAG, "onItemChecked: "+Saved_APIS.size());
+                    iterator.remove();
+                    Fragment_Adapter.RemoveFragment(position);
+                    Fragment_Adapter.notifyDataSetChanged();
+                }
+                position ++;
+            }
+
+
+
+        }
+
+    }
 }

@@ -1,6 +1,8 @@
 package com.example.mosaab.newsreader.Common;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class Common {
@@ -36,4 +38,6 @@ public class Common {
 
         return false;
     }
+
+
 }

@@ -7,12 +7,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="8dp"
     app:cardElevation="8dp"
-    android:layout_margin="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+
     >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:weightSum="5"
+            android:background="@color/colorBackGround"
             android:orientation="horizontal"
             >
 
@@ -20,7 +24,7 @@
                 android:id="@+id/news_image"
                 android:layout_width="0dp"
                 android:layout_weight="2"
-                android:layout_height="wrap_content"
+                android:layout_height="150dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="8dp"
@@ -32,7 +36,7 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:orientation="vertical">
 
@@ -46,7 +50,7 @@
                     android:textAlignment="textStart"
                     android:text="Published At : "
                     android:textColor="@color/colorPrimary"
-                    android:textSize="12sp"
+                    android:textSize="10sp"
                     />
 
                 <TextView
@@ -58,8 +62,8 @@
                     android:textAllCaps="false"
                     android:textAlignment="textStart"
                     android:text="Title"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="18sp"
+                    android:textColor="@color/textTabBright"
+                    android:textSize="14sp"
                     />
 
                 <Button
@@ -71,6 +75,8 @@
                     android:layout_marginEnd="24dp"
                     android:layout_marginBottom="8dp"
                     android:text="Preview"
+                    android:textColor="@color/textTabBright"
+                    android:layout_gravity="bottom"
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textSize="16sp"
